@@ -75,24 +75,24 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
-  'default': {  
-    'ENGINE':   'djongo',
-    'NAME':     'atlan1',
-    'CLIENT': {
-      'host': 'mongodb+srv://puneet:puneet@cluster0.adp1h.mongodb.net/atlan1?retryWrites=true&w=majority',
-      'port': 27017,
-      'username': 'puneet',
-      'password': 'puneet',
-    } 
-  },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+#s DATABASES = {
+#   'default': {  
+#     'ENGINE':   'djongo',
+#     'NAME':     'atlan2',
+#     'CLIENT': {
+#       'host': 'mongodb+srv://puneet:puneet@cluster0.adp1h.mongodb.net/atlan2?retryWrites=true&w=majority',
+#       'port': 27017,
+#       'username': 'puneet',
+#       'password': 'puneet',
+#     } 
+#   },
+# }
 
 
 # Password validation
