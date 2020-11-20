@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from transfer.models import taskData
 from django.http import JsonResponse
+from celery.task.control import revoke
 from transfer import tasks
 
 # endpoint to upload the file then extract the data and save it to database.
@@ -40,4 +41,13 @@ class uploadTeamsView(APIView):
 # endpoint to terminate the ongoing task.
 class terminateView(APIView):
     def post(self, request, format=None):
-        pass
+        task_id=request.POST.get("task_id")
+        if task_id:
+            try:
+                revoke(task_id, terminate=True)
+                return Response(data={'status':'revoked'},status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response(data={'status':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(data={'error':'no task_id'},status=status.HTTP_400_BAD_REQUEST)
+
+
