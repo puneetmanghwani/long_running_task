@@ -14,7 +14,11 @@ from transfer.tasks import exportDataFromFile,extractDataFromFile,makeTeamsFromF
 class uploadFileView(APIView):
     def post(self, request, format=None):
         try:
+
+            # adding the task to execute in background
             onGoingtask = tasks.extractDataFromFile.delay(request.FILES['file'].temporary_file_path())
+            
+            # saving task id in db
             task = taskData(task_id=onGoingtask.id)
             task.save()
             return Response(data={'task_id':task.task_id},status=status.HTTP_200_OK)   
@@ -24,7 +28,11 @@ class uploadFileView(APIView):
 # endpoint to export the data saved in a file.
 class dataExportView(APIView):
     def get(self, request, format=None):
+
+        # adding the task to execute in background
         onGoingtask = tasks.exportDataFromFile.delay()
+
+        # saving task id in db
         task = taskData(task_id=onGoingtask.id)
         task.save()
         return Response(data={'task_id':task.task_id},status=status.HTTP_200_OK)
@@ -34,7 +42,11 @@ class dataExportView(APIView):
 class uploadTeamsView(APIView):
     def post(self, request, format=None):
         try:
+
+            # adding task to execute in background
             onGoingtask = tasks.makeTeamsFromFile.delay(request.FILES['file'].temporary_file_path())
+            
+            # saving task id in db
             task = taskData(task_id=onGoingtask.id)
             task.save()
             return Response(data={'task_id':task.task_id},status=status.HTTP_200_OK)   
@@ -48,6 +60,8 @@ class terminateView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+
+                # stoping a particular task
                 revoke(task_id, terminate=True)
                 return Response(data={'status':'revoked'},status=status.HTTP_200_OK)
             except Exception as e:
@@ -60,8 +74,9 @@ class pauseUploadView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+
+                # updating the state of task by which we can pause the task by writing the custom logic in the extractDataFromFile by checking the status of this task
                 Task.update_state(self=extractDataFromFile, task_id=task_id, state='PAUSING')
-                # onGoingtask = tasks.updateTaskStatus.delay(task_id,"PAUSED")
                 return Response(data={'status':'paused'},status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(data={'status':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -85,8 +100,8 @@ class pauseExportView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+                # updating the state of task by which we can pause the task by writing the custom logic in the exportDataFromFile by checking the status of this task
                 Task.update_state(self=exportDataFromFile, task_id=task_id, state='PAUSING')
-                # onGoingtask = tasks.updateTaskStatus.delay(task_id,"PAUSED")
                 return Response(data={'status':'paused'},status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(data={'status':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -111,8 +126,8 @@ class pauseTeamView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+                # updating the state of task by which we can pause the task by writing the custom logic in the makeTeamsFromFile by checking the status of this id
                 Task.update_state(self=makeTeamsFromFile, task_id=task_id, state='PAUSING')
-                # onGoingtask = tasks.updateTaskStatus.delay(task_id,"PAUSED")
                 return Response(data={'status':'paused'},status=status.HTTP_200_OK)
             except Exception as e:
                 return Response(data={'status':str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
