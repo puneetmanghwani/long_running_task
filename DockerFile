@@ -1,9 +1,6 @@
 FROM python:3.7-buster
 
-RUN apt-get update && apt-get install nginx nano redis-server -y --no-install-recommends
-COPY nginx.default /etc/nginx/sites-available/atlan
-RUN ln -s /etc/nginx/sites-available/atlan /etc/nginx/sites-enabled/
-
+RUN apt-get update && apt-get upgrade &&apt-get install apache2 redis-server -y --no-install-recommends
 
 WORKDIR /usr/src/app
 
@@ -15,4 +12,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 STOPSIGNAL SIGTERM
-CMD ["/usr/src/app/start.sh"]
+CMD ["/usr/src/app/start1.sh"]

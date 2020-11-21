@@ -88,6 +88,7 @@ class resumeUploadView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+                # updating the state of task by which we can resume the task by writing the custom logic in the extractDataFromFile by checking the status of this task
                 Task.update_state(self=extractDataFromFile, task_id=task_id, state='PROCESSING')
                 return Response(data={'status':'resumed'},status=status.HTTP_200_OK)
             except Exception as e:
@@ -113,6 +114,7 @@ class resumeExportView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+                # updating the state of task by which we can resume the task by writing the custom logic in the exportDataFromFile by checking the status of this task
                 Task.update_state(self=exportDataFromFile, task_id=task_id, state='PROCESSING')
                 return Response(data={'status':'resumed'},status=status.HTTP_200_OK)
             except Exception as e:
@@ -139,6 +141,7 @@ class resumeTeamView(APIView):
         task_id=request.POST.get("task_id")
         if task_id:
             try:
+                # updating the state of task by which we can resume the task by writing the custom logic in the makeTeamsFromFile by checking the status of this id
                 Task.update_state(self=makeTeamsFromFile, task_id=task_id, state='PROCESSING')
                 return Response(data={'status':'resumed'},status=status.HTTP_200_OK)
             except Exception as e:

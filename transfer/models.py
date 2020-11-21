@@ -13,8 +13,8 @@ class uploadData(models.Model):
 class teamData(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
-    managers = models.IntegerField(default=0)
-    members = models.IntegerField(default=0)
+    managers = models.CharField(max_length=100)
+    members = models.CharField(max_length=100)
 
 class exportData(models.Model):
 	submitted_by= models.CharField(max_length=100)
