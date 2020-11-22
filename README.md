@@ -1,3 +1,5 @@
+## Docker Image - docker run -p 8010:8000 puneetmanghwani/atlan
+
 ## APIs
    1. **API to Upload CSV file**
    
